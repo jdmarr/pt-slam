@@ -29,3 +29,13 @@ from inertial data which measures accelerations and velocities. Including this f
 evaluation of the SLAM routine against ground truth.
 
 Any fields the user should change are marked with a "# USER: " comment.
+
+Use of transformation matrices
+------------------------------
+
+The script uses 4x4 transformation matrices in most places to represent sensor poses with respect
+to the inertial frame, and with respect to each other (the calibration). However, this algorithm has
+been designed purely for platforms operating in a 2D environment, meaning that tranformation matrices
+are somewhat overkill, as there is no roll, pitch, or height to worry about. The decision to work with
+transformation matrices was made to show that the mechanics of the cost function and the optimizer
+could be extended to 3-dimensional environments.

@@ -2,8 +2,11 @@ Planar Target SLAM
 ==================
 
 Author: Jordan Marr
-E-mail: jordan(.)marr(at)robotics(.)utias(.)utoronto(.)ca 
+
+E-mail: jordan.marr@robotics.utias.utoronto.ca 
+
 Date:     July 19th, 2017 
+
 Modified: November 14th, 2017
 
 Python scripts for performing SLAM with an IMU-Lidar pair with a planar target environment. The use of planes makes the algorithm robust to poor initial extrinisic calibration between the sensors (i.e., a poor guess of the 6 degree of freedom spatial transform between them).

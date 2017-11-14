@@ -9,7 +9,7 @@ Date:     July 19th, 2017
 
 Modified: November 14th, 2017
 
-Python scripts for performing SLAM with an IMU-Lidar pair with a planar target environment. The use of planes makes the algorithm robust to poor initial extrinisic calibration between the sensors (i.e., a poor guess of the 6 degree of freedom spatial transform between them).
+Python scripts for performing SLAM with an IMU-Lidar pair with a planar target environment. The use of planes makes the algorithm robust to poor initial extrinisic calibration between the sensors (i.e., a poor guess of the 6 degree of freedom spatial transform between them). The included sensor data is simulated, and contains simulated IMU bias like what is seen in the real-world. The algorithm demonstrates the improvement obtained from SLAM over the poor trajectory estimate we would get from simply integrating IMU data (dead-reckoning).
 
 The planar SLAM algorithm is based on the following paper:
 

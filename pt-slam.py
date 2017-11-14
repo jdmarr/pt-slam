@@ -1,5 +1,5 @@
 """"""
-# NOTE: Show drifted Lidar pose?
+
 # Places that the user should modify are marked with a "# USER:" comment
 
 # wframe - world (inertial) reference frame
@@ -101,8 +101,10 @@ x_est = np.array([])
 y_est = np.array([])
 x_gt = np.array([])
 y_gt = np.array([])
-x_est_imu = np.array([])
-y_est_imu = np.array([])
+x_unopt = np.array([])
+y_unopt = np.array([])
+x_worstcase = np.array([])
+y_worstcase = np.array([])
 
 error_vals = np.zeros((6,N)) # array of errors in each parameter of the Lidar pose at each timestep
 
@@ -343,8 +345,10 @@ for i in range(N): # main SLAM loop
     y_est = np.append(y_est, T_w_lk[1, 3])
     x_gt = np.append(x_gt, T_w_lk_gt[0, 3])
     y_gt = np.append(y_gt, T_w_lk_gt[1, 3])
-    x_est_imu = np.append(x_est_imu, T_w_ik[0, 3])
-    y_est_imu = np.append(y_est_imu, T_w_ik[1, 3])
+    x_unopt = np.append(x_unopt, np.dot(T_w_ik, T_i_l_gt)[0, 3])
+    y_unopt = np.append(y_unopt, np.dot(T_w_ik, T_i_l_gt)[1, 3])
+    x_worstcase = np.append(x_worstcase, np.dot(T_w_ik, T_i_l)[0, 3])
+    y_worstcase = np.append(y_worstcase, np.dot(T_w_ik, T_i_l)[1, 3])
 
     if disp_poses:
         # Plot the estimated and ground truth positions up to now to see how they're evolving
@@ -356,26 +360,33 @@ for i in range(N): # main SLAM loop
 
 plt.plot(x_est, y_est, '-o', markersize=5, color='red')
 plt.plot(x_gt, y_gt, '-o', markersize=5, color='green')
-plt.xlim((-1, 21))
-plt.ylim((-1, 21))
+plt.xlim((9, 16))
+plt.ylim((4, 11))
+plt.xlabel('x (m)')
+plt.ylabel('y (m)')
 plt.legend(('Est\'d Lidar postion','Gound truth'))
 plt.title('SLAM Results')
 plt.show()
 
 plt.plot(x_est, y_est, '-o', markersize=5, color='red')
-plt.plot(x_est_imu, y_est_imu, '-o', markersize=5, color='green')
-plt.legend(('lidar','IMU'))
-plt.title('Est\'d sensor trajectories')
+plt.plot(x_unopt, y_unopt, '-o', markersize=5, color='green')
+plt.plot(x_worstcase, y_worstcase, '-o', markersize=5, color='blue')
+plt.xlim((9, 16))
+plt.ylim((4, 11))
+plt.xlabel('x (m)')
+plt.ylabel('y (m)')
+plt.legend(('SLAM','Dead reckoning, perfect calibration','Dead reckoning, poor calibration'))
+plt.title('SLAM Improvement over dead reckoning')
 plt.show()
 
 plt.plot(range(len(x_est)), x_est - x_gt)
 plt.xlabel('Timestep')
-plt.ylabel('Error in Lidar x coordinate')
+plt.ylabel('Error in Lidar x coordinate (m)')
 plt.show()
 
 plt.plot(range(len(x_est)), y_est - y_gt)
 plt.xlabel('Timestep')
-plt.ylabel('Error in Lidar y coordinate')
+plt.ylabel('Error in Lidar y coordinate (m)')
 plt.show()
 
 rmse = np.sqrt(np.mean(np.square(error_vals), axis=1))
